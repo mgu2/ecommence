@@ -21,7 +21,19 @@ def index():
     cur = mysql.connection.cursor()
     cur.execute('''SELECT id, name, place FROM sample''')
     entries = cur.fetchall()
-    return render_template('index.html', entries=entries)
+    datas = []
+
+    for entry in entries:
+        dict = {
+            'id' : int(entry[0]),
+            'name': str(entry[1]),
+            'place': str(entry[2])
+        }
+        datas.append(dict)
+
+
+    print datas
+    return render_template('index.html', entries=datas)
 
 
 @app.route('/add', methods=['POST'])
