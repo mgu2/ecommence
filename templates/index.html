@@ -1,27 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
 
-  <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
-    <dl>
-      <dt>Id:
-      <dd><input type="text" size="30" name="id">
-      <dt>Name:
-      <dd><input type="text" size="30" name="name">
-      <dt>Place:
-      <dd><input type="text" size="30" name="place">
-      <dd><input type="submit" value="Submit">
-    </dl>
 
-    <ul class="entries">
-      {% for entry in entries %}
-        <li>id:{{ entry.id }}  name:{{ entry.name }}  place:{{ entry.place }}
-
-      {% endfor %}
-
-
-    </ul>
-
+  <form action = "/redirect" method = "post">
+      <input type="submit" name="selection" value="showall" />
+      <input type="submit" name="selection" value="showone" />
+      <input type="submit" name="selection" value="edit" />
+      <input type="submit" name="selection" value="add" />
   </form>
+
+
+
 
 
 {% endblock %}

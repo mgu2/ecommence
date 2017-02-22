@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+
+
+<form action = "/">
+
+
+  <ul class="entries">
+    {% for entry in entries %}
+      <li>id:{{ entry.id }}  name:{{ entry.name }}  place:{{ entry.place }}
+
+    {% endfor %}
+
+
+  </ul>
+
+  <input type="submit" name="selection" value="back" />
+
+</form>
+
+
+
+
+{% endblock %}
