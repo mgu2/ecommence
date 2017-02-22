@@ -27,7 +27,7 @@ def redirectTo():
     sel = request.form['selection']
     if sel == 'showall':
         cur = mysql.connection.cursor()
-        cur.execute('''SELECT id, name, place FROM sample''')
+        cur.execute('''SELECT * FROM sample''')
         entries = cur.fetchall()
         datas = []
 
@@ -40,7 +40,7 @@ def redirectTo():
             datas.append(dict)
 
 
-        return render_template('showall.html', entries=datas)
+        return render_template('show.html', entries=datas)
 
     if sel == 'showone':
         return render_template('showone.html')
@@ -58,13 +58,23 @@ def redirectTo():
 def showone():
     cur = mysql.connection.cursor()
     req_form = request.form
-    t = (str(req_form['id']), str(req_form['name']), str(req_form['place']))
-    cur.execute('SELECT * FROM sample;')
+    t = (int(req_form['id']), str(req_form['name']), str(req_form['place']))
 
+    cur.execute('''SELECT * FROM sample WHERE id=%d AND name='%s' AND place='%s' '''% (2, 'YY', 'CA'))
+    entries = cur.fetchall()
+    datas = []
+
+    for entry in entries:
+        dict = {
+            'id' : int(entry[0]),
+            'name': str(entry[1]),
+            'place': str(entry[2])
+        }
+        datas.append(dict)
 
     # mysql.connection.commit()
     # flash('New entry was successfully posted')
-    return redirect(url_for('index'))
+    return render_template('show.html', entries=datas)
 
 
 #
