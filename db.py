@@ -48,8 +48,8 @@ def redirectTo():
     # if sel == edit:
     #     return render_template('edit.html')
     #
-    # if sel == delete:
-    #     return render_template('delete.html')
+    if sel == 'add':
+        return render_template('addone.html')
 
 
     return redirect(url_for('index'))
@@ -60,7 +60,7 @@ def showone():
     req_form = request.form
     t = (int(req_form['id']), str(req_form['name']), str(req_form['place']))
 
-    cur.execute('''SELECT * FROM sample WHERE id=%d AND name='%s' AND place='%s' '''% (2, 'YY', 'CA'))
+    cur.execute('''SELECT * FROM sample WHERE id=%d AND name='%s' AND place='%s' '''% t)
     entries = cur.fetchall()
     datas = []
 
@@ -75,6 +75,24 @@ def showone():
     # mysql.connection.commit()
     # flash('New entry was successfully posted')
     return render_template('show.html', entries=datas)
+
+
+
+@app.route('/addone', methods=['POST'])
+def add_entry():
+    cur = mysql.connection.cursor()
+    req_form = request.form
+    t = (int(req_form['id']), str(req_form['name']), str(req_form['place']))
+
+    cur.execute('''INSERT INTO sample(id, name, place) VALUES (%d, '%s', '%s') ''' % t)
+
+    mysql.connection.commit()
+
+    # mysql.connection.commit()
+    # flash('New entry was successfully posted')
+    return redirect(url_for('index'))
+
+
 
 
 #
