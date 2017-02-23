@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 
-  {% if session.logged_in %}
+  {% if 'logged_in' in session %}
   <form action = "/redirect" method = "post">
     <div class = "buttons">
       <input class ="btn btn-primary" type="submit" name="selection" value="showall" />
@@ -13,13 +13,13 @@
   {% endif %}
 
 
-  {% if !session.logged_in %}
-  <h1>Please log in or sign up first!</h1>
+  {% if 'logged_in' not in session %}
+  <h2>Please log in or sign up first!</h2>
   <form action = "/redirect" method = "post">
     <div class = "buttons">
       <input class ="btn btn-primary" type="submit" name="selection" value="login" />
       <input class ="btn btn-primary" type="submit" name="selection" value="signup" />
-      
+
     </div>
   </form>
   {% endif %}

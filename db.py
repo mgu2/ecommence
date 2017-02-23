@@ -18,6 +18,7 @@ mysql.init_app(app)
 
 @app.route('/')
 def index():
+
     return render_template('index.html')
 
 
@@ -51,10 +52,10 @@ def redirectTo():
     if sel == 'add':
         return render_template('addone.html')
 
-    if sel == 'login'
+    if sel == 'login':
         return render_template('login.html')
 
-    if sel == 'sign up'
+    if sel == 'signup':
         return render_template('signup.html')
 
 
@@ -119,9 +120,7 @@ def signup():
     error = None
     if request.method == 'POST':
         if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
+            error = 'Duplicate username'
         else:
             session['logged_in'] = True
             flash('You were logged in')
@@ -135,7 +134,7 @@ def signup():
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
-return redirect(url_for('show_entries'))
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(port=5000, debug = True)
