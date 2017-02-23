@@ -28,7 +28,8 @@ def redirectTo():
     sel = request.form['selection']
     if sel == 'showall':
         cur = mysql.connection.cursor()
-        cur.execute('''SELECT * FROM sample''')
+        t = (str(session['user']))
+        cur.execute('''SELECT * FROM sample WHERE user='%s' ''' % t)
         entries = cur.fetchall()
         datas = []
 
@@ -66,9 +67,9 @@ def redirectTo():
 def showone():
     cur = mysql.connection.cursor()
     req_form = request.form
-    t = (int(req_form['id']), str(req_form['name']), str(req_form['place']))
+    t = (int(req_form['id']), str(req_form['name']), str(req_form['place']), session['user'])
 
-    cur.execute('''SELECT * FROM sample WHERE id=%d AND name='%s' AND place='%s' '''% t)
+    cur.execute('''SELECT * FROM sample WHERE id=%d AND name='%s' AND place='%s' AND user='%s' '''% t)
     entries = cur.fetchall()
     datas = []
 
@@ -90,9 +91,9 @@ def showone():
 def add_entry():
     cur = mysql.connection.cursor()
     req_form = request.form
-    t = (int(req_form['id']), str(req_form['name']), str(req_form['place']))
+    t = (int(req_form['id']), str(req_form['name']), str(req_form['place']), session['user'])
 
-    cur.execute('''INSERT INTO sample(id, name, place) VALUES (%d, '%s', '%s') ''' % t)
+    cur.execute('''INSERT INTO sample(id, name, place, user) VALUES (%d, '%s', '%s', '%s') ''' % t)
 
     mysql.connection.commit()
     return redirect(url_for('index'))
@@ -116,6 +117,7 @@ def login():
 
         else:
             session['logged_in'] = True
+            session['user'] = str(req_form['username'])
             flash('You were logged in')
             return redirect(url_for('index'))
     return render_template('login.html', error=error)
@@ -137,6 +139,7 @@ def signup():
             cur.execute('''INSERT INTO users(user, password) VALUES('%s', '%s') ''' % t)
             mysql.connection.commit()
             session['logged_in'] = True
+            session['user'] = str(req_form['username'])
             flash('You were logged in')
             return redirect(url_for('index'))
     return render_template('signup.html', error=error)
