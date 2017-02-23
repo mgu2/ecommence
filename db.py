@@ -103,10 +103,17 @@ def add_entry():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
+        cur = mysql.connection.cursor()
+        req_form = request.form
+        t = (str(req_form['username']), str(req_form['password']))
+        cur.execute('''SELECT * FROM users WHERE user='%s' AND password='%s' ''' % t)
+        entries = cur.fetchall()
+
+
+
+        if len(entries) == 0:
             error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
+
         else:
             session['logged_in'] = True
             flash('You were logged in')
