@@ -126,9 +126,16 @@ def login():
 def signup():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
+        cur = mysql.connection.cursor()
+        req_form = request.form
+        t = (str(req_form['username']), str(req_form['password']))
+        cur.execute('''SELECT * FROM users WHERE user='%s' AND password='%s' ''' % t)
+        entries = cur.fetchall()
+        if len(entries) > 0:
             error = 'Duplicate username'
         else:
+            cur.execute('''INSERT INTO users(user, password) VALUES('%s', '%s') ''' % t)
+            mysql.connection.commit()
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('index'))
